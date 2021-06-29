@@ -7,20 +7,10 @@ from flask import request
 # get all data
 def index():
     try:
-        listData = []
         getAll = Dosen.query.all()
+        responseData = Dosen.formatArray(listData=getAll)
         
-        for data in getAll:
-            dosen = {
-                'id': data.id,
-                'nidn': data.nidn,
-                'name': data.name,
-                'phone': data.phone,
-                'address': data.address
-            }
-            listData.append(dosen)
-        
-        return response.success(listData, 'Success')
+        return response.success(responseData, 'Success')
     except Exception as e:
         print(e)
 
@@ -36,7 +26,7 @@ def detail(id):
         if not dosen:
             return response.badRequest([], 'Tidak ada data dosen')
         
-        dataMahasiswa = formatMahasiswa(mahasiswa)
+        dataMahasiswa = Mahasiswa.formatArray(mahasiswa)
         data = {
             'id': dosen.id,
             'nidn': dosen.nidn,
@@ -50,19 +40,6 @@ def detail(id):
     except Exception as e:
         print(e)
 
-def formatMahasiswa(datas):
-    array = []
-    for data in datas:
-        mhs = {
-            'id': data.id,
-            'nim': data.nim,
-            'name': data.name,
-            'phone': data.phone,
-            'address': data.address
-        }
-        array.append(mhs)
-    
-    return array
 
 # add data
 def save():
@@ -73,15 +50,7 @@ def save():
         phone = request.form.get('phone')
         address = request.form.get('address')
         
-        # if using raw data
-        # rawData = json.loads(request.get_data())
-        # nidn = rawData['nidn']
-        # name = rawData['name']
-        # phone = rawData['phone']
-        # address = rawData['address']
-        
         dosen = Dosen(nidn=nidn, name=name, phone=phone, address=address)
-        print(dosen)
         
         # push data
         db.session.add(dosen)
@@ -90,6 +59,7 @@ def save():
         return response.success('', "success to add lecture data!")
     except Exception as e:
         print(e)
+
 
 # update data
 def update(lectureId):
@@ -124,6 +94,7 @@ def update(lectureId):
         return response.success(input, "Sucess to update data")
     except Exception as e:
         print(e)
+
 
 # delete data
 def delete(lectureId):

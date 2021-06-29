@@ -1,10 +1,19 @@
 from app import app
 from app.controller import DosenController
+from app.controller import UserController
 from flask import request
 
 @app.route('/')
 def index():
     return "Hello world!"
+
+@app.route('/register-admin', methods=['POST'])
+def register():
+    return UserController.createAdmin()
+
+@app.route('/login', methods=['POST'])
+def login():
+    return UserController.loginAdmin()
 
 @app.route('/dosen', methods=['GET', 'POST'])
 def lectures():

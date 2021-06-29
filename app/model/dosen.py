@@ -7,5 +7,28 @@ class Dosen(db.Model):
     phone = db.Column(db.String(13), nullable=False)
     address = db.Column(db.String(100), nullable=False)
     
-    def __repr__(self) -> str:
+    def __repr__(self):
         return '<Dosen {}>'.format(self.name)
+
+    def formatArray(listData):
+        array = []
+        for data in listData:
+            dosen = {
+            'id': data.id,
+            'nidn': data.nidn,
+            'name': data.name,
+            'phone': data.phone,
+            'address': data.address
+            }
+            array.append(dosen)
+        
+        return array
+
+    def formatObject(data):
+        return {
+            'id': data.id,
+            'nidn': data.nidn,
+            'name': data.name,
+            'phone': data.phone,
+            'address': data.address
+        }

@@ -10,5 +10,28 @@ class Mahasiswa(db.Model):
     first_lecturer = db.Column(db.BigInteger, db.ForeignKey(Dosen.id, ondelete='CASCADE'))
     second_lecturer = db.Column(db.BigInteger, db.ForeignKey(Dosen.id, ondelete='CASCADE'))
     
-    def __repr__(self) -> str:
+    def __repr__(self):
         return '<Mahasiswa {}>'.format(self.name)
+    
+    def formatArray(listData):
+        array = []
+        for data in listData:
+            dosen = {
+            'id': data.id,
+            'nim': data.nim,
+            'name': data.name,
+            'phone': data.phone,
+            'address': data.address
+            }
+            array.append(dosen)
+        
+        return array
+
+    def formatObject(data):
+        return {
+            'id': data.id,
+            'nim': data.nim,
+            'name': data.name,
+            'phone': data.phone,
+            'address': data.address
+        }
