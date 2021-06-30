@@ -1,7 +1,9 @@
 from app import app
 from app.controller import DosenController
 from app.controller import UserController
-from flask import request
+from flask import request, jsonify
+from flask_jwt_extended import get_jwt_identity
+from flask_jwt_extended import jwt_required
 
 @app.route('/')
 def index():
@@ -16,6 +18,7 @@ def login():
     return UserController.loginAdmin()
 
 @app.route('/dosen', methods=['GET', 'POST'])
+@jwt_required()
 def lectures():
     if request.method == 'GET':
         return DosenController.index()
