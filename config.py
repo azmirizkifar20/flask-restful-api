@@ -9,6 +9,8 @@ class Config(object):
     PASSWORD = str(os.environ.get("DB_PASSWORD"))
     
     JWT_SECRET_KEY = str(os.environ.get("JWT_SECRET"))
+    UPLOAD_FOLDER = str(os.environ.get("UPLOAD_FOLDER"))
+    MAX_CONTENT_LENGTH = 2 * 1024 * 1024
     
     SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://' + USERNAME + ':' + PASSWORD + '@' + HOST + '/' + NAME
     SQLALCHEMY_TRACK_MODIFICATIONS = False

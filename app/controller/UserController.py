@@ -1,9 +1,15 @@
 from datetime import timedelta
+from app import app
 from app.model.user import User
+from app.model.media import Media
 
-from app import response, db
+import os
+import uuid
+
+from app import response, db, uploadConfig
 from flask import request
 from flask_jwt_extended import *
+from werkzeug.utils import secure_filename
 
 # add data
 def createAdmin():
@@ -55,5 +61,43 @@ def loginAdmin():
             "access_token": access_token,
             "refresh_token": refresh_token
         }, "Success login!")
+    except Exception as e:
+        print(e)
+
+
+# upload
+def upload():
+    try:
+        title = request.form.get('title')
+        
+        # check uploaded file
+        if 'file' not in request.files:
+            return response.badRequest('', 'no file uploaded!')
+        
+        file = request.files['file']
+        
+        # check file name
+        if file.filename == '':
+            return response.badRequest('', 'no file uploaded!')
+        
+        # check allowed file
+        if file and uploadConfig.allowedFiles(file.filename):
+            fileName = secure_filename(file.filename)
+            renameFile = 'Flask-' + str(uuid.uuid4()) + fileName
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], renameFile))
+            
+            # push data
+            upload = Media(title=title, path_name=renameFile)
+            db.session.add(upload)
+            db.session.commit()
+            
+            return response.success(
+                {
+                    'title': title,
+                    'pathName': renameFile
+                }, 'Sucess to upload media!'
+            )
+        else:
+            return response.badRequest('', 'file extensions not allowed!')
     except Exception as e:
         print(e)

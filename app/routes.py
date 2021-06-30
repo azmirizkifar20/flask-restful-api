@@ -33,3 +33,7 @@ def lectureDetail(id):
         return DosenController.update(id)
     elif request.method == 'DELETE':
         return DosenController.delete(id)
+
+@app.route('/file-upload', methods=['POST'])
+def upload():
+    return UserController.upload()
